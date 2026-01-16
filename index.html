@@ -3,49 +3,138 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>My First Website</title>
+  <title>Random Generator Hub</title>
   <style>
     body {
+      margin: 0;
       font-family: Arial, sans-serif;
       background-color: #f4f4f4;
-      margin: 0;
-      padding: 0;
     }
-    header {
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       background-color: #222;
+      padding: 15px 30px;
       color: white;
-      padding: 20px;
-      text-align: center;
     }
+
+    nav .links button {
+      background: none;
+      border: none;
+      color: white;
+      margin-left: 15px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    nav .links button:hover {
+      text-decoration: underline;
+    }
+
     main {
       padding: 40px;
+    }
+
+    .section {
+      display: none;
       text-align: center;
     }
-    button {
+
+    .section.active {
+      display: block;
+    }
+
+    img {
+      max-width: 300px;
+      margin: 30px auto;
+      display: block;
+      border-radius: 10px;
+    }
+
+    input {
+      padding: 8px;
+      margin: 5px;
+      width: 80px;
+    }
+
+    button.action {
       padding: 10px 20px;
       font-size: 16px;
       cursor: pointer;
+      margin-top: 10px;
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Welcome to my website 🚀</h1>
-    <p>Built with HTML & CSS</p>
-  </header>
+
+  <nav>
+    <h2>Random Hub</h2>
+    <div class="links">
+      <button onclick="showSection('home')">Home</button>
+      <button onclick="showSection('numbers')">Random Number</button>
+      <button onclick="showSection('countries')">Random Country</button>
+    </div>
+  </nav>
 
   <main>
-    <h2>Random Number Generator 🎲</h2>
-    <p>Click the button to generate a random number between 1 and 100.</p>
-    <h1 id="number">–</h1>
-    <button onclick="generateNumber()">Generate</button>
+    <!-- HOME -->
+    <div id="home" class="section active">
+      <h1>Welcome 👋</h1>
+      <p>This is a simple website with fun random generators.</p>
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/512px-React-icon.svg.png" alt="placeholder image">
+      <p>Use the menu above to try the generators.</p>
+    </div>
+
+    <!-- RANDOM NUMBER -->
+    <div id="numbers" class="section">
+      <h1>Random Number Generator 🎲</h1>
+      <p>Choose a range:</p>
+      <input type="number" id="min" value="1" />
+      <input type="number" id="max" value="100" />
+      <br>
+      <h2 id="number">–</h2>
+      <button class="action" onclick="generateNumber()">Generate</button>
+    </div>
+
+    <!-- RANDOM COUNTRY -->
+    <div id="countries" class="section">
+      <h1>Random Country Generator 🌍</h1>
+      <h2 id="country">–</h2>
+      <button class="action" onclick="generateCountry()">Pick a Country</button>
+    </div>
   </main>
 
   <script>
+    function showSection(sectionId) {
+      document.querySelectorAll('.section').forEach(section => {
+        section.classList.remove('active');
+      });
+      document.getElementById(sectionId).classList.add('active');
+    }
+
     function generateNumber() {
-      const random = Math.floor(Math.random() * 100) + 1;
+      const min = parseInt(document.getElementById('min').value);
+      const max = parseInt(document.getElementById('max').value);
+      if (min > max) {
+        alert('Invalid range');
+        return;
+      }
+      const random = Math.floor(Math.random() * (max - min + 1)) + min;
       document.getElementById('number').textContent = random;
     }
+
+    const countries = [
+      'Mexico','Canada','Brazil','Japan','Germany','France','Italy','Spain',
+      'Argentina','Chile','Australia','China','India','South Africa'
+    ];
+
+    function generateCountry() {
+      const random = Math.floor(Math.random() * countries.length);
+      document.getElementById('country').textContent = countries[random];
+    }
   </script>
+
 </body>
 </html>

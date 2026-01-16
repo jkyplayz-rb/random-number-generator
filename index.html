@@ -56,7 +56,8 @@
     input {
       padding: 8px;
       margin: 5px;
-      width: 80px;
+      width: 160px;
+      text-align: center;
     }
 
     button.action {
@@ -64,6 +65,16 @@
       font-size: 16px;
       cursor: pointer;
       margin-top: 10px;
+    }
+
+    .emoji {
+      font-size: 80px;
+      margin: 20px 0;
+    }
+
+    .result {
+      margin-top: 15px;
+      font-weight: bold;
     }
   </style>
 </head>
@@ -74,7 +85,8 @@
     <div class="links">
       <button onclick="showSection('home')">Home</button>
       <button onclick="showSection('numbers')">Random Number</button>
-      <button onclick="showSection('countries')">Random Country</button>
+      <button onclick="showSection('fruit')">Random Fruit</button>
+      <button onclick="showSection('flag')">Guess the Flag</button>
     </div>
   </nav>
 
@@ -82,9 +94,9 @@
     <!-- HOME -->
     <div id="home" class="section active">
       <h1>Welcome 👋</h1>
-      <p>This is a simple website with fun random generators.</p>
+      <p>This site has small fun games built with HTML, CSS, and JavaScript.</p>
       <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/512px-React-icon.svg.png" alt="placeholder image">
-      <p>Use the menu above to try the generators.</p>
+      <p>Use the menu above to try each game.</p>
     </div>
 
     <!-- RANDOM NUMBER -->
@@ -98,11 +110,24 @@
       <button class="action" onclick="generateNumber()">Generate</button>
     </div>
 
-    <!-- RANDOM COUNTRY -->
-    <div id="countries" class="section">
-      <h1>Random Country Generator 🌍</h1>
-      <h2 id="country">–</h2>
-      <button class="action" onclick="generateCountry()">Pick a Country</button>
+    <!-- RANDOM FRUIT -->
+    <div id="fruit" class="section">
+      <h1>Random Fruit Generator 🍎</h1>
+      <div class="emoji" id="fruitEmoji">–</div>
+      <div id="fruitName">–</div>
+      <button class="action" onclick="generateFruit()">Pick a Fruit</button>
+    </div>
+
+    <!-- GUESS THE FLAG -->
+    <div id="flag" class="section">
+      <h1>Guess the Flag 🏳️</h1>
+      <div class="emoji" id="flagEmoji">–</div>
+      <input type="text" id="flagInput" placeholder="Type the country" />
+      <br>
+      <button class="action" onclick="checkFlag()">Submit</button>
+      <div class="result" id="flagResult"></div>
+      <br>
+      <button onclick="newFlag()">New Flag</button>
     </div>
   </main>
 
@@ -125,15 +150,54 @@
       document.getElementById('number').textContent = random;
     }
 
-    const countries = [
-      'Mexico','Canada','Brazil','Japan','Germany','France','Italy','Spain',
-      'Argentina','Chile','Australia','China','India','South Africa'
+    const fruits = [
+      { name: 'Apple', emoji: '🍎' },
+      { name: 'Banana', emoji: '🍌' },
+      { name: 'Grapes', emoji: '🍇' },
+      { name: 'Strawberry', emoji: '🍓' },
+      { name: 'Watermelon', emoji: '🍉' },
+      { name: 'Pineapple', emoji: '🍍' },
+      { name: 'Peach', emoji: '🍑' }
     ];
 
-    function generateCountry() {
-      const random = Math.floor(Math.random() * countries.length);
-      document.getElementById('country').textContent = countries[random];
+    function generateFruit() {
+      const random = Math.floor(Math.random() * fruits.length);
+      document.getElementById('fruitEmoji').textContent = fruits[random].emoji;
+      document.getElementById('fruitName').textContent = fruits[random].name;
     }
+
+    const flags = [
+      { country: 'Mexico', emoji: '🇲🇽' },
+      { country: 'United States', emoji: '🇺🇸' },
+      { country: 'Japan', emoji: '🇯🇵' },
+      { country: 'Brazil', emoji: '🇧🇷' },
+      { country: 'France', emoji: '🇫🇷' },
+      { country: 'Germany', emoji: '🇩🇪' }
+    ];
+
+    let currentFlag = null;
+
+    function newFlag() {
+      const random = Math.floor(Math.random() * flags.length);
+      currentFlag = flags[random];
+      document.getElementById('flagEmoji').textContent = currentFlag.emoji;
+      document.getElementById('flagResult').textContent = '';
+      document.getElementById('flagInput').value = '';
+    }
+
+    function checkFlag() {
+      const input = document.getElementById('flagInput').value.trim().toLowerCase();
+      if (!currentFlag) return;
+
+      const correct = currentFlag.country.toLowerCase();
+      if (input === correct) {
+        document.getElementById('flagResult').textContent = '✅ Correct!';
+      } else {
+        document.getElementById('flagResult').textContent = '❌ Try again';
+      }
+    }
+
+    newFlag();
   </script>
 
 </body>
